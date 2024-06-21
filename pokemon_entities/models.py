@@ -14,3 +14,8 @@ class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
     appeared_at = models.DateTimeField(null=True, blank=True)
     disappeared_at = models.DateTimeField(null=True, blank=True)
+    level = models.IntegerField()
+    health = models.IntegerField()
+    strenght = models.IntegerField()
+    defence = models.IntegerField()
+    stamina = models.IntegerField()
