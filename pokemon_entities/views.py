@@ -1,5 +1,4 @@
 import folium
-import json
 
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
@@ -62,6 +61,21 @@ def show_all_pokemons(request):
 
 def show_pokemon(request, pokemon_id):
     pokemon = Pokemon.objects.get(id=pokemon_id)
+    previous_evolution = {}
+    next_evolution = {}
+    if pokemon.previous_evolution:
+        previous_evolution = {
+            'pokemon_id': pokemon.previous_evolution.id,
+            'title_ru': pokemon.previous_evolution.title,
+            'img_url': request.build_absolute_uri(pokemon.previous_evolution.image.url)
+        }
+    if pokemon.next_evolution.first():
+        next_evolution = {
+            'pokemon_id': pokemon.next_evolution.first().id,
+            'title_ru': pokemon.next_evolution.first().title,
+            'img_url': request.build_absolute_uri(pokemon.next_evolution.first().image.url)
+        }
+
     pokemon_on_page = {
         'pokemon_id': pokemon.id,
         'img_url': request.build_absolute_uri(pokemon.image.url),
@@ -70,13 +84,9 @@ def show_pokemon(request, pokemon_id):
         'title_en': pokemon.title_en,
         "title_jp": pokemon.title_jp,
         'description': pokemon.description,
-        'previous_evolution': {
-            'pokemon_id': pokemon.previous_evolution.id,
-            'title_ru': pokemon.previous_evolution.title,
-            'img_url': request.build_absolute_uri(pokemon.previous_evolution.image.url)
-        }
+        'previous_evolution': previous_evolution,
+        'next_evolution': next_evolution
     }
-
 
     activate('Europe/Moscow')
     current_time = localtime()
