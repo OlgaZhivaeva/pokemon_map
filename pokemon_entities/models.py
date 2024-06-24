@@ -19,7 +19,7 @@ class Pokemon(models.Model):
 class PokemonEntity(models.Model):
     lat = models.FloatField('широта')
     lon = models.FloatField('долгота')
-    pokemon = models.ForeignKey(Pokemon, verbose_name='покемон', on_delete=models.CASCADE)
+    pokemon = models.ForeignKey(Pokemon, verbose_name='покемон', on_delete=models.CASCADE, related_name='pokemon_entities')
     appeared_at = models.DateTimeField('появится', null=True, blank=True)
     disappeared_at = models.DateTimeField('пропадет',null=True, blank=True)
     level = models.IntegerField('уровень', null=True, blank=True)
