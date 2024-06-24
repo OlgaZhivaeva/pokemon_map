@@ -110,10 +110,7 @@ def show_pokemon(request, pokemon_id):
     else:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
-
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(),
         'pokemon': pokemon_on_page
     })
-
-
