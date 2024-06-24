@@ -69,11 +69,11 @@ def show_pokemon(request, pokemon_id):
             'title_ru': pokemon.previous_evolution.title,
             'img_url': request.build_absolute_uri(pokemon.previous_evolution.image.url)
         }
-    if pokemon.next_evolution.first():
+    if pokemon.next_evolutions.first():
         next_evolution = {
-            'pokemon_id': pokemon.next_evolution.first().id,
-            'title_ru': pokemon.next_evolution.first().title,
-            'img_url': request.build_absolute_uri(pokemon.next_evolution.first().image.url)
+            'pokemon_id': pokemon.next_evolutions.first().id,
+            'title_ru': pokemon.next_evolutions.first().title,
+            'img_url': request.build_absolute_uri(pokemon.next_evolutions.first().image.url)
         }
 
     pokemon_on_page = {
