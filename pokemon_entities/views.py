@@ -61,19 +61,23 @@ def show_all_pokemons(request):
 
 def show_pokemon(request, pokemon_id):
     pokemon = get_object_or_404(Pokemon, id=pokemon_id)
+
     previous_evolution = {}
-    next_evolution = {}
-    if pokemon.previous_evolution:
+    previous = pokemon.previous_evolution
+    if previous:
         previous_evolution = {
-            'pokemon_id': pokemon.previous_evolution.id,
-            'title_ru': pokemon.previous_evolution.title,
-            'img_url': request.build_absolute_uri(pokemon.previous_evolution.image.url)
+            'pokemon_id': previous.id,
+            'title_ru': previous.title,
+            'img_url': request.build_absolute_uri(previous.image.url)
         }
-    if pokemon.next_evolutions.first():
+
+    next_evolution = {}
+    next = pokemon.next_evolutions.first()
+    if next:
         next_evolution = {
-            'pokemon_id': pokemon.next_evolutions.first().id,
-            'title_ru': pokemon.next_evolutions.first().title,
-            'img_url': request.build_absolute_uri(pokemon.next_evolutions.first().image.url)
+            'pokemon_id': next.id,
+            'title_ru': next.title,
+            'img_url': request.build_absolute_uri(next.image.url)
         }
 
     pokemon_on_page = {
@@ -92,11 +96,12 @@ def show_pokemon(request, pokemon_id):
     current_time = localtime()
     img_url = request.build_absolute_uri(pokemon.image.url)
 
-    if PokemonEntity.objects.filter(pokemon=pokemon.id, appeared_at__lt=current_time, disappeared_at__gt=current_time):
-        folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-        for pokemon_entity in PokemonEntity.objects.filter(pokemon=pokemon,
+    active_pokemon_еntities = PokemonEntity.objects.filter(pokemon=pokemon.id,
                                                            appeared_at__lt=current_time,
-                                                           disappeared_at__gt=current_time):
+                                                           disappeared_at__gt=current_time)
+    if active_pokemon_еntities:
+        folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
+        for pokemon_entity in active_pokemon_еntities:
             add_pokemon(
                 folium_map, pokemon_entity.lat,
                 pokemon_entity.lon,
