@@ -1,6 +1,5 @@
 import folium
 
-from django.http import HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404
 
 from pokemon_entities.models import Pokemon, PokemonEntity
