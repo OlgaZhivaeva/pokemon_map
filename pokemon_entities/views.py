@@ -99,16 +99,14 @@ def show_pokemon(request, pokemon_id):
     active_pokemon_еntities = PokemonEntity.objects.filter(pokemon=pokemon.id,
                                                            appeared_at__lt=current_time,
                                                            disappeared_at__gt=current_time)
-    if active_pokemon_еntities:
-        folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-        for pokemon_entity in active_pokemon_еntities:
-            add_pokemon(
-                folium_map, pokemon_entity.lat,
-                pokemon_entity.lon,
-                img_url
-            )
-    else:
-        return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
+
+    folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
+    for pokemon_entity in active_pokemon_еntities:
+        add_pokemon(
+            folium_map, pokemon_entity.lat,
+            pokemon_entity.lon,
+            img_url
+        )
 
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(),
